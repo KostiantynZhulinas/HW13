@@ -1,53 +1,84 @@
-class Student {
-    constructor(name, lastName, birthYear, course) {
-        this.name = name;
-        this.lastName = lastName;
-        this.birthYear = birthYear;
-        this.course = course;
-        this.grades = [];
-        this.attendance = [];
-    }
-
-    addGrade(grade) {
-        this.grades.push(grade);
-    }
-
-    addAttendance(attendance) {
-        this.attendance.push(attendance);
-    }
-
-    getAverageGrade() {
-        if (this.grades.length === 0) {
-            return 0;
-        }
-        const sumOfGrades = this.grades.reduce((sum, grade) => sum + grade, 0);
-        return sumOfGrades / this.grades.length;
-    }
-
-    getAverageAttendance() {
-        if (this.attendance.length === 0) {
-            return 0;
-        }
-        const sumOfAttendance = this.attendance.reduce((sum, attendance) => sum + attendance, 0);
-        return sumOfAttendance / this.attendance.length;
-    }
-
-    getNumberOfClassesAttended() {
-        return this.attendance.length;
-    }
-
-    changeCourse(newCourse) {
-        this.course = newCourse;
-    }
-
-    getInfo() {
-        return `Name: ${this.name}\nLast Name: ${this.lastName}\nBirth Year: ${this.birthYear}\nCourse: ${this.course}\nGrades: ${this.grades.join(', ')}\nAttendance: ${this.attendance.join(', ')}\nAverage Grade: ${this.getAverageGrade()}\nAverage Attendance: ${this.getAverageAttendance()}\nNumber of Classes Attended: ${this.getNumberOfClassesAttended()}`;
-    }
+function Student(name, surname, birthYear, course) {
+    this.name = name;
+    this.surname = surname;
+    this.birthYear = birthYear;
+    this.course = course;
+    this.grades = [];
+    this.attendance = [];
 }
 
-const student1 = new Student("Kostiantyn", "Zhulinas", 1994, 1);
-student1.addGrade(0);
-student1.addGrade(100);
-student1.addAttendance(1);
-student1.addAttendance(0);
-console.log(student1.getInfo());
+Student.prototype.addGrade = function (grade) {
+    this.grades.push(grade);
+}
+
+Student.prototype.addAttendance = function (attendance) {
+    this.attendance.push(attendance);
+}
+
+Student.prototype.getAverageGrade = function () {
+    if (this.grades.length === 0) {
+        return 0;
+    }
+    var sum = this.grades.reduce(function (a, b) {
+        return a + b;
+    });
+    return sum / this.grades.length;
+}
+
+Student.prototype.getAverageAttendance = function () {
+    if (this.attendance.length === 0) {
+        return 0;
+    }
+    var sum = this.attendance.reduce(function (a, b) {
+        return a + b;
+    });
+    return sum / this.attendance.length;
+}
+
+Student.prototype.getNumberOfClasses = function () {
+    return this.attendance.length;
+}
+
+Student.prototype.changeCourse = function (newCourse) {
+    this.course = newCourse;
+}
+
+Student.prototype.getInformation = function () {
+    return "Name: " + this.name + "\nSurname: " + this.surname + "\nBirth Year: " + this.birthYear + "\nCourse: " + this.course + "\nGrades: " + this.grades.join(", ") + "\nAttendance: " + this.attendance.join(", ");
+}
+Student.prototype.getAverageAttendancePercentage = function () {
+    if (this.attendance.length === 0) {
+        return "No attendance data available.";
+    }
+    
+    var sum = this.attendance.reduce(function (a, b) {
+        return a + b;
+    });
+    
+    var averageAttendancePercentage = (sum / this.attendance.length) * 100;
+    
+    return averageAttendancePercentage.toFixed(1) + "%";
+}
+
+function JuniorStudent(name, surname, birthYear, course, gradeCount, classCount) {
+    Student.call(this, name, surname, birthYear, course);
+    this.grades = Array(gradeCount).fill(0);
+    this.attendance = Array(classCount).fill(0);
+}
+
+JuniorStudent.prototype = Object.create(Student.prototype);
+
+var student = new JuniorStudent("Kostiantyn", "Zhulinas", 1994, 1, 0, 0);
+
+student.addGrade(100);
+student.addGrade(0);
+student.addGrade(100);
+student.addAttendance(1);
+student.addAttendance(0);
+student.addAttendance(0);
+
+
+console.log(student.getInformation());
+console.log("Average Grade: " + student.getAverageGrade().toFixed(1));
+console.log("Average Attendance: " + student.getAverageAttendancePercentage());
+console.log("Number of Attended Classes: " + student.getNumberOfClasses());
